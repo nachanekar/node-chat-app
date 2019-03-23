@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>chat app</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <!-- <script src="/socket.io/socket.io.js"></script> -->
+
+    <script src="/socket.io/socket.io.js"></script>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" />
+</head>
+
+<body>
+
+
+    <div class="container">
+        <h1 class="text-center text-primary">Chat App</h1>
+        <form class="well">
+            <div class="form-group">
+
+                <textarea id="taMsg" class="form-control" cols="30" rows="10"></textarea>
+            </div>
+            <div class="form-group">
+                <div class="row">
+                    <div class="col-xs-10 col-sm-10 col-md-10 col-lg-10">
+                        <input type="text" id="txtMsg" class="form-control">
+                    </div>
+
+                    <div class="col-xs-2 col-sm-2 col-md-2 col-lg-2">
+                        <button type="button" id="btnSend" class="btn btn-large btn-block btn-primary">Send</button>
+                    </div>
+                </div>
+            </div>
+    </div>
+
+    </form>
+
+
+
+    <script>
+        $(document).ready(function () {
+            var chatterName = prompt("Chat Name Please");
+            var socket = io.connect("/");
+            debugger;
+
+            socket.on("acknowlege", msg => {
+                alert("Server says : " + msg.message);
+            });
+            socket.on("ServerMsg", (chatter, msg) => {
+                $("#taMsg").append(chatter + ":" + msg + "\n");
+            });
+
+            $("#btnSend").click(function () {
+                socket.emit("testing")
+                //alert($("#txtMsg").val());
+                var sendText = $("#txtMsg").val();
+                console.log(sendText);
+                socket.emit("msgToServer", chatterName, sendText);
+                // var appendText = $("#taMsg").val()
+                // //alert(appendText);
+                // appendText += "\n" + sendText
+                // $("#taMsg").val(appendText);
+                $("#txtMsg").val("");
+            });
+        });
+
+     // read value from textbox
+
+    </script>
+</body>
+
+</html>
